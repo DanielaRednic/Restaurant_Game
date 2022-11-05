@@ -1,0 +1,11 @@
+{
+    "games": {
+        "1": {
+            "player1_score": "1",
+            "player1_resource_count": "12",
+            "player2_score": "2",
+            "player2_resource_count": "15",
+            "remaining_time": "12"
+        }
+    }
+}
