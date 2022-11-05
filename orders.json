@@ -1,6 +1,7 @@
 {
     "orders": [
         ["fruit", "fruit", "dairy"],
+        ["meat", "vegetables", "grains"],
         ["dairy", "fruit", "pastries"],
         ["vegetables", "grains", "pastries"],
         ["pastries", "meat", "fruit"],
