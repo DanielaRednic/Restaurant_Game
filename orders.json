@@ -6,7 +6,6 @@
         ["pastries", "meat", "fruit"],
         ["fruit", "fruit", "pastries"],
         ["vegetables", "vegetables", "meat"],
-        ["meat", "meat", "vegetables"],
         ["meat", "grains", "dairy"],
         ["pastries", "grains", "dairy"],
         ["pastries", "vegetables", "dairy"],

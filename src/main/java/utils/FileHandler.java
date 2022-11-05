@@ -17,6 +17,9 @@ public class FileHandler {
     FileHandler(String path) {
         this.path = path;
     }
+    static public FileHandler fileHandlerInit(String path) {
+        return new FileHandler(path);
+    }
 
     public ArrayList<String> readLastGameStateJSON() {
         JSONParser parser = new JSONParser();
