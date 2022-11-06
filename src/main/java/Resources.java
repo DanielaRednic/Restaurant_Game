@@ -40,7 +40,6 @@ public class Resources {
         int max = 5;
 
         for(int i= 0; i< array.length; i++) {
-            //array[i] = (int)Math.floor(Math.random() * (max - min + 1) + min);
             array[i] = 4;
         }
 
