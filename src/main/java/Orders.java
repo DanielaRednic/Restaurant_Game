@@ -1,12 +1,13 @@
 import utils.FileHandler;
 
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.Arrays;
 import java.util.Random;
 
 public class Orders {
     //gets the orders from the FileHandler
-    private ArrayList<ArrayList<String>> resources;
+    private Vector<Vector<String>> resources;
 
     Orders() {
         initialiseOrders();
@@ -22,10 +23,10 @@ public class Orders {
         return random.nextInt(upperbound);
     }
 
-    public ArrayList<Integer> givePlayerOrder() {
-        ArrayList<Integer> orderAsInt = new ArrayList<>(Arrays.
+    public Vector<Integer> givePlayerOrder() {
+        Vector<Integer> orderAsInt = new Vector<>(Arrays.
                                                             asList(0, 0, 0, 0, 0, 0));
-        ArrayList<String> order = this.resources.get(getRandomNumber(29)); //repair orders.json, check which order is missing
+        Vector<String> order = this.resources.get(getRandomNumber(29)); //repair orders.json, check which order is missing
         System.out.println(order);
         for (String neededResource : order) {
             switch (neededResource) {
@@ -61,7 +62,7 @@ public class Orders {
     }
     public static void main(String[] args) {
         Orders order = new Orders();
-        ArrayList<Integer> bla = order.givePlayerOrder();
+        Vector<Integer> bla = order.givePlayerOrder();
         System.out.println(bla);
     }
 

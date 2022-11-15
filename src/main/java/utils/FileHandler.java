@@ -21,9 +21,9 @@ public class FileHandler {
         return new FileHandler(path);
     }
 
-    public ArrayList<String> readLastGameStateJSON() {
+    public Vector<String> readLastGameStateJSON() {
         JSONParser parser = new JSONParser();
-        ArrayList<String> lastGameStatus = new ArrayList<>();
+        Vector<String> lastGameStatus = new Vector<>();
         try {
             JSONObject JSONFile = (JSONObject) parser.parse(new FileReader(this.path));
 
@@ -57,14 +57,14 @@ public class FileHandler {
         return lastGameStatus;
     }
 
-    public ArrayList<ArrayList<String>> readOrdersJSON()  {
-        ArrayList<ArrayList<String>> ordersList = new ArrayList<>();
+    public Vector<Vector<String>> readOrdersJSON()  {
+        Vector<Vector<String>> ordersList = new Vector<>();
         JSONParser parser = new JSONParser();
         try {
             JSONObject jsonFile = (JSONObject) parser.parse(new FileReader(this.path)); //big object
             JSONArray orderList = (JSONArray) jsonFile.get("orders"); // orders which is an array
             for (Object resourceList : orderList) {
-                ArrayList<String> stringList = new ArrayList<>();
+                Vector<String> stringList = new Vector<>();
                 JSONArray ordersItem = (JSONArray) resourceList;
                 for (Object resource : ordersItem) {
                     stringList.add((String) resource);
@@ -79,8 +79,8 @@ public class FileHandler {
         return ordersList;
     }
 
-    private void printOrdersList(ArrayList<ArrayList<String>> ordersList) {
-        for (ArrayList<String> resourceList : ordersList) {
+    private void printOrdersList(Vector<Vector<String>> ordersList) {
+        for (Vector<String> resourceList : ordersList) {
             for (String resource : resourceList)
                 System.out.print(resource + " ");
             System.out.println();
@@ -88,7 +88,7 @@ public class FileHandler {
 
     }
 
-    private void printLastGameStatus(ArrayList<String> list) {
+    private void printLastGameStatus(Vector<String> list) {
         for(String string : list)
             System.out.println(string);
     }
