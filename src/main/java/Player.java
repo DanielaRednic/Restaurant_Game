@@ -1,48 +1,48 @@
-import java.util.ArrayList;
+import java.util.Vector;
 
 public class Player {
-    public int[] resources = {0, 0, 0, 0, 0, 0};
+    public Vector<Integer> resources= new Vector<>(6);
     public int score;
 
     public Player() {
         Resources resObj = new Resources();
-        this.resources = resObj.getPlayerResources(resources);
+        this.resources =new Vector<>(resObj.getPlayerResources(resources));
         this.score=0;
     }
 
-    private int[] isOrderPossibleHelper(ArrayList<Integer> orderAsInt){
-        int[] k ={0,0,0,0,0,0};
+    private Vector<Integer> isOrderPossibleHelper(Vector<Integer> orderAsInt){
+        Vector<Integer>k =new Vector<>(6);
         for (int i = 0 ; i < 6 ; i++){
-            k[i]=this.resources[i]-orderAsInt.get(i);
+            k.add(i,this.resources.get(i)-orderAsInt.get(i));
         }
         return k;
     }
-    private int isOrderPossible(ArrayList<Integer> orderAsInt) {
+    private int isOrderPossible(Vector<Integer> orderAsInt) {
         int j=0;
-        int k[]= isOrderPossibleHelper(orderAsInt);
+        Vector<Integer> k=new Vector<>(isOrderPossibleHelper(orderAsInt));
         for(int i=0;i<6;i++){
-            if(k[i]<0){
-            j=j+1;
+            if(k.get(i)<0){
+                j=j+1;
             }
         }
         return j;
     }
-    public void completeOrder(ArrayList<Integer> orderAsInt){
+    public void completeOrder(Vector<Integer> orderAsInt){
         for (int i = 0; i < 6; i++) {
-            this.resources[i] = this.resources[i] - orderAsInt.get(i);
+            this.resources.add(i,this.resources.get(i)-orderAsInt.get(i));
         }
         this.score=this.score+1;
     }
-    public int checkIfNeededResourceToCompleteOrderFromOtherPlayer(ArrayList<Integer> orderAsInt){
+    public int checkIfNeededResourceToCompleteOrderFromOtherPlayer(Vector<Integer> orderAsInt){
         for (int i = 0; i < 6; i++) {
-            if(this.resources[i] - orderAsInt.get(i)<0){
+            if(this.resources.get(i) - orderAsInt.get(i)<0){
                 return i;
             }
         }
         return -1;
     }
     public int checkIfAvailableResourceInTrade(int j){
-        if(this.resources[j]-1>0){
+        if(this.resources.get(j)-1>0){
             return 1;
         }
         return 0;
@@ -51,22 +51,22 @@ public class Player {
         int max=0;
         int index=-1;
         for(int i=0;i<6;i++){
-            if(this.resources[i]>max) {
-                max = this.resources[i];
+            if(this.resources.get(i)>max) {
+                max = this.resources.get(i);
                 index = i;
             }
         }
         return index;
     }
 
-    public int decisionMakerOnOrders(ArrayList<Integer> orderAsInt){
+    public int decisionMakerOnOrders(Vector<Integer> orderAsInt){
         int j=isOrderPossible(orderAsInt);
         if(j==0){
             completeOrder(orderAsInt);
             return -1;
         } else if(j==1){
             for(int i=0;i<6;i++){
-                if(this.resources[i] < orderAsInt.get(i))
+                if(this.resources.get(i) < orderAsInt.get(i))
                     return i;
             }
         }else{
