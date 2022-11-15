@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Resources {
     
     public Resources() {
@@ -13,12 +15,12 @@ public class Resources {
         grains
     };
 
-    public boolean checkResourceAmount(int [] array)
+    public boolean checkResourceAmount(Vector<Integer> resources)
     {
         int sum = 0;
-        for(int i = 0; i < array.length; i++)
+        for(int i = 0; i < resources.size(); i++)
         {
-            sum = sum + array[i];
+            sum = sum + resources.get(i);
         }
 
         if(sum == 20)
@@ -35,28 +37,28 @@ public class Resources {
         }
     }
 
-    public int [] getPlayerResources(int [] array) {
+    public Vector<Integer> getPlayerResources(Vector<Integer> playerResources) {
         int min = 0;
         int max = 5;
 
-        for(int i= 0; i< array.length; i++) {
-            array[i] = 4;
+        for(int i= 0; i< playerResources.size(); i++) {
+            playerResources.add(i, 4);
         }
 
         do
         {
             int rand = (int)Math.floor(Math.random() * (max - min + 1) + min);
-            if (array[rand] > 2)
+            if (playerResources.get(rand) > 2)
             {
-                array[rand] = array[rand] - 1;
+                playerResources.set(rand,  playerResources.get(rand)-1);
             }
-        }while (checkResourceAmount(array) != true);
+        }while (checkResourceAmount(playerResources) != true);
 
-        for(int i= 0; i< array.length; i++) {
-            System.out.print(array[i]);
+        for(int i= 0; i< playerResources.size(); i++) {
+            System.out.print(playerResources.get(i));
         }
 
-        return array;
+        return playerResources;
     }
 
 
