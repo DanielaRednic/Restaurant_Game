@@ -1,6 +1,8 @@
+import java.util.*;
+
 public class Players {
-    public int player1[] = {0, 0, 0, 0, 0, 0};
-    public int player2[] = {0, 0, 0, 0, 0, 0};
+    Vector<Integer> player1 = new Vector<Integer>(6);
+    Vector<Integer> player2 = new Vector<Integer>(6);
     public Players() {
         Resources resObj = new Resources();
         System.out.println("Giving players resources...");
