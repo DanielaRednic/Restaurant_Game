@@ -1,9 +1,14 @@
+import utils.FileHandler;
+
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws FileNotFoundException {
         System.out.println("##### Starting Game #####");
         System.out.println("##### Game time: 90s ####");
+        FileHandler fl = new FileHandler("orders.json");
+        fl.readOrdersGSON();
         Thread t = new Thread();
         t.start();
         // Players players = new Players();
