@@ -1,15 +1,16 @@
 import java.util.Vector;
 
 public class Player implements Runnable{
-    public Vector<Integer> resources= new Vector<>(6);
+
+    public Vector<Integer> resources= new Vector<>(6, 0);
     public int score;
     boolean run = true;
-
     public Player() {
         Resources resObj = new Resources();
-        this.resources =new Vector<>(resObj.getPlayerResources(resources));
-        this.score=0;
+        resObj.getPlayerResources(this.resources);
+        this.score = 0;
     }
+
 
     private Vector<Integer> isOrderPossibleHelper(Vector<Integer> orderAsInt){
         Vector<Integer>k =new Vector<>(6);
@@ -30,7 +31,7 @@ public class Player implements Runnable{
     }
     public void completeOrder(Vector<Integer> orderAsInt){
         for (int i = 0; i < 6; i++) {
-            this.resources.add(i,this.resources.get(i)-orderAsInt.get(i));
+            this.resources.set(i,this.resources.get(i)-orderAsInt.get(i));
         }
         this.score=this.score+1;
     }
@@ -85,15 +86,20 @@ public class Player implements Runnable{
     public void run(){
         int resolved_case;
         Vector<Integer> order ;
+        Orders order1 = new Orders();
         while(run){
-            order = givePlayerOrder();
+            order = order1.givePlayerOrder();
             resolved_case = decisionMakerOnOrders(order);
-            System.out.println(order+" "+resolved_case);
+            System.out.println(order+" "+resolved_case + " " + this.resources);
 
             if(resolved_case >= 0){
                 //trades
             }
-            wait(6000);
+            try {
+                Thread.sleep(6000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

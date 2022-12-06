@@ -22,7 +22,7 @@ public class GameHandler {
     }
 
     public GameHandler writeLastGameState(Player player1, Player player) {
-
+    return new GameHandler();
     }
     //Writes to "LastGameState.txt" in case of crash
 }

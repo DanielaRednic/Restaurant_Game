@@ -41,7 +41,7 @@ public class Resources {
         int min = 0;
         int max = 5;
 
-        for(int i= 0; i< playerResources.size(); i++) {
+        for(int i = 0; i < 6/*playerResources.capacity()*/; i++) {
             playerResources.add(i, 4);
         }
 
@@ -53,10 +53,6 @@ public class Resources {
                 playerResources.set(rand,  playerResources.get(rand)-1);
             }
         }while (checkResourceAmount(playerResources) != true);
-
-        for(int i= 0; i< playerResources.size(); i++) {
-            System.out.print(playerResources.get(i));
-        }
 
         return playerResources;
     }

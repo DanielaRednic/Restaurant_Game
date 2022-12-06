@@ -22,7 +22,7 @@ public class main {
         try{
             final Timer timer = new Timer();
                 timer.scheduleAtFixedRate(new TimerTask() {
-                    int i = 90; // Time in seconds
+                    int i = 20; // Time in seconds
 
                     public void run() {
                         System.out.println(i--);
@@ -30,18 +30,20 @@ public class main {
                             timer.cancel();
                             player1.setRun(false);
                             player2.setRun(false);
+                            if(player1.score >= player2.score){
+                                System.out.println("##### Player 1 Wins! Score:"+ player1.score +"####");
+                            }
+                            else{
+                                System.out.println("##### Player 2 Wins! Score:"+ player2.score +"####");
+                            }
+
                         }
                     }
                 }, 0, 1000);
         }catch(Exception e){
             System.out.println(e);
         }
-        if(player1.score >= player2.score){
-            System.out.println("##### Player 1 Wins! Score:"+ player1.score +"####");
-        }
-        else{
-            System.out.println("##### Player 2 Wins! Score:"+ player2.score +"####");
-        }
+
         
     }
 }
