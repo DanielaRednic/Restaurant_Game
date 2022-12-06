@@ -1,8 +1,9 @@
 import java.util.Vector;
 
-public class Player {
+public class Player implements Runnable{
     public Vector<Integer> resources= new Vector<>(6);
     public int score;
+    boolean run = true;
 
     public Player() {
         Resources resObj = new Resources();
@@ -63,16 +64,36 @@ public class Player {
         int j=isOrderPossible(orderAsInt);
         if(j==0){
             completeOrder(orderAsInt);
-            return -1;
+            return -1; //order is complete
         } else if(j==1){
             for(int i=0;i<6;i++){
                 if(this.resources.get(i) < orderAsInt.get(i))
-                    return i;
+                    return i; //returns needed resource for trade
             }
         }else{
             this.score=this.score-1;
-            return -2;
+            return -2; //order cant be done
         }
-        return -3;
+        return -3; // failsafe
+    }
+
+    public void setRun(boolean toSet) {
+        run = false;
+    }
+
+    @Override
+    public void run(){
+        int resolved_case;
+        Vector<Integer> order ;
+        while(run){
+            order = givePlayerOrder();
+            resolved_case = decisionMakerOnOrders(order);
+            System.out.println(order+" "+resolved_case);
+
+            if(resolved_case >= 0){
+                //trades
+            }
+            wait(6000);
+        }
     }
 }
