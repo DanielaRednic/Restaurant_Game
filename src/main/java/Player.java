@@ -5,6 +5,7 @@ public class Player implements Runnable{
     public Vector<Integer> resources= new Vector<>(6, 0);
     public int score;
     boolean run = true;
+
     public Player() {
         Resources resObj = new Resources();
         resObj.getPlayerResources(this.resources);
@@ -81,7 +82,10 @@ public class Player implements Runnable{
     public void setRun(boolean toSet) {
         run = false;
     }
+    public synchronized Integer updateEnemyResource() {
 
+                          return 0;
+    }
     @Override
     public void run(){
         int resolved_case;
@@ -90,6 +94,7 @@ public class Player implements Runnable{
         while(run){
             order = order1.givePlayerOrder();
             resolved_case = decisionMakerOnOrders(order);
+
             System.out.println(order+" "+resolved_case + " " + this.resources);
 
             if(resolved_case >= 0){
