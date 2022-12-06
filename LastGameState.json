@@ -1,11 +1,9 @@
 {
     "games": {
-        "1": {
             "player1_score": "1",
             "player1_resource_count": "array",
             "player2_score": "2",
             "player2_resource_count": "array",
             "remaining_time": "12"
-        }
     }
 }
