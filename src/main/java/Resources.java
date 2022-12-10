@@ -37,10 +37,10 @@ public class Resources {
         }
     }
 
-    public Vector<Integer> getPlayerResources(Vector<Integer> playerResources) {
+    public Vector<Integer> getPlayerResources() {
         int min = 0;
         int max = 5;
-
+        Vector<Integer> playerResources=new Vector<>(6);
         for(int i = 0; i < 6/*playerResources.capacity()*/; i++) {
             playerResources.add(i, 4);
         }

@@ -30,8 +30,7 @@ public class Orders {
     }
 
     public Vector<Integer> givePlayerOrder() {
-        Vector<Integer> orderAsInt = new Vector<>(Arrays.
-                                                            asList(0, 0, 0, 0, 0, 0));
+        Vector<Integer> orderAsInt = new Vector<>(Arrays.asList(0, 0, 0, 0, 0, 0));
         Vector<String> order = this.resources.get(getRandomNumber(29) + 1); //repair orders.json, check which order is missing
         System.out.println(order);
 

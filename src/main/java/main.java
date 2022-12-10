@@ -11,8 +11,9 @@ public class main {
         System.out.println("##### Game time: 90s ####");
         FileHandler fl = new FileHandler("orders.json");
         fl.readOrdersGSON();
-        Player player1 = new Player();
-        Player player2 = new Player();
+        Bank bank=new Bank(2);
+        Player player1 = new Player(1,bank);
+        Player player2 = new Player(2,bank);
         Thread p1_thread = new Thread(player1);
         Thread p2_thread = new Thread(player2);
         
@@ -36,10 +37,9 @@ public class main {
                             else{
                                 System.out.println("##### Player 2 Wins! Score:"+ player2.score +"####");
                             }
-
                         }
                     }
-                }, 0, 1000);
+                }, 0, 5000);
         }catch(Exception e){
             System.out.println(e);
         }
