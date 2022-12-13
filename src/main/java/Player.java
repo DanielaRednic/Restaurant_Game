@@ -84,9 +84,7 @@ public class Player implements Runnable{
         while(run){
             order = order1.givePlayerOrder();
             resolved_case = decisionMakerOnOrders(order);
-
             System.out.println(order+" "+resolved_case + " " + this.bank.getResources(playerNo));
-
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
