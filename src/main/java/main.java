@@ -1,12 +1,19 @@
 import utils.FileHandler;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeoutException;
+
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.Channel;
+import java.nio.charset.StandardCharsets;
 
 public class main {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws Exception {
         System.out.println("##### Starting Game #####");
         System.out.println("##### Game time: 90s ####");
         FileHandler fl = new FileHandler("orders.json");
@@ -19,7 +26,23 @@ public class main {
         
         p1_thread.start();
         p2_thread.start();
+         String QUEUE_NAME = "hello";
 
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost");
+       // factory.setPort(8001);
+        try (Connection connection = factory.newConnection();
+             Channel channel = connection.createChannel()) {
+            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+            String message = "Player1|1";
+            channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
+
+            System.out.println(" [x] Sent '" + message + "'");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
         try{
             final Timer timer = new Timer();
                 timer.scheduleAtFixedRate(new TimerTask() {

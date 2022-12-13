@@ -1,4 +1,11 @@
+import java.io.IOException;
 import java.util.Vector;
+
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.Channel;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeoutException;
 
 public class Player implements Runnable{
     public int score;
@@ -16,6 +23,25 @@ public class Player implements Runnable{
     public void completeOrder(Vector<Integer> orderAsInt){
         bank.pay(playerNo,orderAsInt);
         this.score=this.score+1;
+        String QUEUE_NAME = "hello";
+
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost");
+        try (Connection connection = factory.newConnection();
+             Channel channel = connection.createChannel()) {
+            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+            String message = "Player" + playerNo + "|1";
+            channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
+
+            System.out.println(" [x] Sent '" + message + "'");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 //    public int checkIfNeededResourceToCompleteOrderFromOtherPlayer(Vector<Integer> orderAsInt){
 //        for (int i = 0; i < 6; i++) {

@@ -8,14 +8,6 @@ public class GameHandler {
     private final int player2_resource_count;
     private final int remaining_time;
 
-
-    public static GameHandler readLastGameStateGSON() throws FileNotFoundException {
-        Gson gson = new Gson();
-        BufferedReader bufferedReader = new BufferedReader(
-                new FileReader("LastGameState.json"));
-        return gson.fromJson(bufferedReader, GameHandler.class);
-    }
-
     private GameHandler(Player player1, Player player2, Integer time) {
         player1_score = player1.score;
         player2_score = player2.score;
@@ -26,6 +18,12 @@ public class GameHandler {
         remaining_time = time;
     }
 
+    public static GameHandler readLastGameStateGSON() throws FileNotFoundException {
+        Gson gson = new Gson();
+        BufferedReader bufferedReader = new BufferedReader(
+                new FileReader("LastGameState.json"));
+        return gson.fromJson(bufferedReader, GameHandler.class);
+    }
 
     public static int writeLastGameState(Player player1, Player player2, Integer time) throws IOException {
         Gson gson = new Gson();
