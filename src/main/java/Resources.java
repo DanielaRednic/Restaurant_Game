@@ -37,11 +37,13 @@ public class Resources {
         }
     }
 
-    public Vector<Integer> getPlayerResources() {
+    public Vector<Integer> getPlayerResources(Vector<Integer> playerResources)
+    {
         int min = 0;
         int max = 5;
-        Vector<Integer> playerResources=new Vector<>(6);
-        for(int i = 0; i < 6/*playerResources.capacity()*/; i++) {
+
+        for(int i= 0; i< playerResources.size(); i++)
+        {
             playerResources.add(i, 4);
         }
 
@@ -54,8 +56,11 @@ public class Resources {
             }
         }while (checkResourceAmount(playerResources) != true);
 
+        for(int i= 0; i< playerResources.size(); i++) 
+        {
+            System.out.print(playerResources.get(i));
+        }
+
         return playerResources;
     }
-
-
 }
