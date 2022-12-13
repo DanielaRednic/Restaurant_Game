@@ -26,6 +26,7 @@ public class Player implements Runnable{
         if(j==0)
         {
             completeOrder(orderAsInt);
+            bank.givePlayerResources(playerNo);
             return -1; //order is complete
         } 
         else if(j==1)
@@ -41,19 +42,16 @@ public class Player implements Runnable{
                 }
                 else
                 {
-                    this.score=this.score-1;
                     return -2;
                 }
             }
             else
             {
-                this.score=this.score-1;
                 return -2;
             }
         }
         else
         {
-            this.score=this.score-1;
             return -2; //order cant be done
         }
     }
@@ -62,11 +60,6 @@ public class Player implements Runnable{
     {
         run = false;
     }
-    public synchronized Integer updateEnemyResource()
-    {
-        return 0;
-    }
-    
     @Override
     public void run()
     {
@@ -79,14 +72,18 @@ public class Player implements Runnable{
             resolved_case = decisionMakerOnOrders(order);
 
             System.out.println(order+" "+resolved_case + " " + this.bank.getResources(playerNo));
-
-            try 
-            {
-                Thread.sleep(1000);
-            } 
-            catch (InterruptedException e) 
-            {
-                e.printStackTrace();
+            if(resolved_case==-1) {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

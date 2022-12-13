@@ -1,10 +1,10 @@
 import java.util.*;
 
 public class Resources {
-    
+
     public Resources() {
     }
-    
+
     //This enum is used for remembering the order of the resources inside of the array
     public enum ResourceType {
         fruit,
@@ -37,13 +37,11 @@ public class Resources {
         }
     }
 
-    public Vector<Integer> getPlayerResources(Vector<Integer> playerResources)
-    {
+    public synchronized Vector<Integer> getPlayerResources() {
         int min = 0;
         int max = 5;
-
-        for(int i= 0; i< playerResources.size(); i++)
-        {
+        Vector<Integer> playerResources=new Vector<>(6);
+        for(int i = 0; i < 6/*playerResources.capacity()*/; i++) {
             playerResources.add(i, 4);
         }
 
@@ -56,11 +54,8 @@ public class Resources {
             }
         }while (checkResourceAmount(playerResources) != true);
 
-        for(int i= 0; i< playerResources.size(); i++) 
-        {
-            System.out.print(playerResources.get(i));
-        }
-
         return playerResources;
     }
+
+
 }

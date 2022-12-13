@@ -57,6 +57,16 @@ public class Bank
             this.resourcesforeachplayer.get(playerNo).set(i,this.resourcesforeachplayer.get(playerNo).get(i)-orderAsInt.get(i));
         }
     }
+    public synchronized void givePlayerResources(int playerNo){
+        int min = 0;
+        int max = 5;
+        int rand = (int)Math.floor(Math.random() * (max - min + 1) + min);
+        int rand2= (int)Math.floor(Math.random() * (max - min + 1) + min);
+        int rand3=(int)Math.floor(Math.random() * (max - min + 1) + min);
+        this.resourcesforeachplayer.get(playerNo).set(rand,this.resourcesforeachplayer.get(playerNo).get(rand)+1);
+        this.resourcesforeachplayer.get(playerNo).set(rand2,this.resourcesforeachplayer.get(playerNo).get(rand2)+1);
+        this.resourcesforeachplayer.get(playerNo).set(rand3,this.resourcesforeachplayer.get(playerNo).get(rand3)+1);
+    }
     public synchronized int trade(int playerNo,int resourceNeeded)
     {
         System.out.println("##### Trading #####");
@@ -94,4 +104,5 @@ public class Bank
     {
         return this.resourcesforeachplayer.get(playerNo);
     }
+
 }
