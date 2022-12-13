@@ -2,12 +2,14 @@ import utils.FileHandler;
 
 import java.util.ArrayList;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Random;
 
 public class Orders {
     //gets the orders from the FileHandler
-    private Vector<Vector<String>> resources;
+    private Map<Integer, Vector<String>> resources = new ConcurrentHashMap<>();
 
     Orders() {
         initialiseOrders();
@@ -15,7 +17,11 @@ public class Orders {
 
     private void initialiseOrders() {
         FileHandler fl = FileHandler.fileHandlerInit("orders.json");
-        this.resources = fl.readOrdersJSON();
+        try{
+        this.resources = fl.readOrdersGSON();
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }
 
     private int getRandomNumber(int upperbound) {
@@ -24,10 +30,10 @@ public class Orders {
     }
 
     public Vector<Integer> givePlayerOrder() {
-        Vector<Integer> orderAsInt = new Vector<>(Arrays.
-                                                            asList(0, 0, 0, 0, 0, 0));
-        Vector<String> order = this.resources.get(getRandomNumber(29)); //repair orders.json, check which order is missing
+        Vector<Integer> orderAsInt = new Vector<>(Arrays.asList(0, 0, 0, 0, 0, 0));
+        Vector<String> order = this.resources.get(getRandomNumber(29) + 1); //repair orders.json, check which order is missing
         System.out.println(order);
+
         for (String neededResource : order) {
             switch (neededResource) {
                 case "fruit": {
