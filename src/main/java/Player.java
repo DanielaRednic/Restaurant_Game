@@ -76,6 +76,16 @@ public class Player implements Runnable{
 
                           return 0;
     }
+
+    public int getNumberOfResource() {
+        Vector<Integer> resources =  this.bank.getResources(playerNo);
+        Integer nrOfResource = 0;
+        for(Integer resource : resources)
+        {
+            nrOfResource += resource;
+        }
+        return nrOfResource;
+    }
     @Override
     public void run(){
         int resolved_case;
