@@ -1,9 +1,13 @@
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Vector;
 
+import com.google.gson.Gson;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
+import utils.GSONQueueObject;
+
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
@@ -31,10 +35,11 @@ public class Player implements Runnable{
         try (Connection connection = factory.newConnection();
              Channel channel = connection.createChannel()) {
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-            String message = "Player" + playerNo + "|1";
-            channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
 
-            System.out.println(" [x] Sent '" + message + "'");
+            byte[] message = GSONQueueObject.createQueueObject(this.bank.resources, "Player" + this.playerNo, true);
+            channel.basicPublish("", QUEUE_NAME, null, message);
+
+           // System.out.println(" [x] Sent '" + Arrays.toString(message) + "'");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {
