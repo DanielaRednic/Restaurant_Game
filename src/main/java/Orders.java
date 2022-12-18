@@ -1,62 +1,77 @@
 import utils.FileHandler;
 
-import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Random;
 
-public class Orders {
+public class Orders 
+{
     //gets the orders from the FileHandler
     private Map<Integer, Vector<String>> resources = new ConcurrentHashMap<>();
 
-    Orders() {
+    Orders() 
+    {
         initialiseOrders();
     }
 
-    private void initialiseOrders() {
+    private void initialiseOrders() 
+    {
         FileHandler fl = FileHandler.fileHandlerInit("orders.json");
-        try{
-        this.resources = fl.readOrdersGSON();
-        }catch(Exception e){
+        try
+        {
+            this.resources = fl.readOrdersGSON();
+        }
+        catch(Exception e)
+        {
             System.out.println(e);
         }
     }
 
-    private int getRandomNumber(int upperbound) {
+    private int getRandomNumber(int upperbound)
+    {
         Random random = new Random();
         return random.nextInt(upperbound);
     }
 
-    public Vector<Integer> givePlayerOrder() {
+    public Vector<Integer> givePlayerOrder()
+    {
         Vector<Integer> orderAsInt = new Vector<>(Arrays.asList(0, 0, 0, 0, 0, 0));
-        Vector<String> order = this.resources.get(getRandomNumber(29) + 1); //repair orders.json, check which order is missing
-        System.out.println(order);
+        Vector<String> order = this.resources.get(getRandomNumber(29) + 1);
+        //System.out.println(order);
 
-        for (String neededResource : order) {
-            switch (neededResource) {
-                case "fruit": {
+        for (String neededResource : order)
+        {
+            switch (neededResource)
+            {
+                case "fruit":
+                {
                     orderAsInt.set(0, orderAsInt.get(0) + 1);
                     break;
                 }
-                case "vegetables": {
+                case "vegetables":
+                {
                     orderAsInt.set(1, orderAsInt.get(1) + 1);
                     break;
                 }
-                case "meat": {
+                case "meat":
+                {
                     orderAsInt.set(2, orderAsInt.get(2) + 1);
                     break;
                 }
-                case "dairy": {
+                case "dairy":
+                {
                     orderAsInt.set(3, orderAsInt.get(3) + 1);
                     break;
                 }
-                case "pastries": {
+                case "pastries":
+                {
                     orderAsInt.set(4, orderAsInt.get(4) + 1);
                     break;
                 }
-                case "grains": {
+                case "grains":
+                {
                     orderAsInt.set(5, orderAsInt.get(5) + 1);
                     break;
                 }
@@ -66,10 +81,4 @@ public class Orders {
         }
         return orderAsInt;
     }
-    public static void main(String[] args) {
-        Orders order = new Orders();
-        Vector<Integer> bla = order.givePlayerOrder();
-        System.out.println(bla);
-    }
-
 }
