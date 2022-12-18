@@ -86,10 +86,6 @@ public class Player implements Runnable{
     {
         run = false;
     }
-    public synchronized Integer updateEnemyResource() {
-
-                          return 0;
-    }
 
     public int getNumberOfResource() {
         Vector<Integer> resources =  this.bank.getResources(playerNo);
