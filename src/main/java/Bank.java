@@ -18,6 +18,8 @@ public class Bank
         }
     }
 
+    //Helper method for isOrderPossible
+    //We create a vector with the needed resources for the order
     private Vector<Integer> isOrderPossibleHelper(int playerNo,Vector<Integer> orderAsInt)
     {
         Vector<Integer>k =new Vector<>(6);
@@ -28,6 +30,8 @@ public class Bank
         }
         return k;
     }
+
+    //Method for checking if a player can complete an order.
     public int isOrderPossible(int playerNo,Vector<Integer> orderAsInt)
     {
         int j=0;
@@ -41,6 +45,8 @@ public class Bank
         }
         return j;
     }
+
+    //Method that returns the resource a players wants to obtain from trading.
     public int getNeededResource(int playerNo,Vector<Integer> orderAsInt)
     {
         for(int i=0;i<6;i++)
@@ -50,6 +56,8 @@ public class Bank
         }
         return -1;
     }
+
+    //Method for paying resources to the bank.
     public void pay(int playerNo, Vector<Integer> orderAsInt)
     {
         for (int i = 0; i < 6; i++) 
@@ -57,16 +65,20 @@ public class Bank
             this.resourcesforeachplayer.get(playerNo).set(i,this.resourcesforeachplayer.get(playerNo).get(i)-orderAsInt.get(i));
         }
     }
+
+    //Method that rewards the players 3 random resources after they complete an order.
     public synchronized void givePlayerResources(int playerNo){
         int min = 0;
         int max = 5;
         int rand = (int)Math.floor(Math.random() * (max - min + 1) + min);
         int rand2= (int)Math.floor(Math.random() * (max - min + 1) + min);
-        int rand3=(int)Math.floor(Math.random() * (max - min + 1) + min);
+        int rand3= (int)Math.floor(Math.random() * (max - min + 1) + min);
         this.resourcesforeachplayer.get(playerNo).set(rand,this.resourcesforeachplayer.get(playerNo).get(rand)+1);
         this.resourcesforeachplayer.get(playerNo).set(rand2,this.resourcesforeachplayer.get(playerNo).get(rand2)+1);
         this.resourcesforeachplayer.get(playerNo).set(rand3,this.resourcesforeachplayer.get(playerNo).get(rand3)+1);
     }
+
+    //Method that handles the trading between players.
     public synchronized int trade(int playerNo,int resourceNeeded)
     {
         System.out.println("##### Trading #####");
@@ -100,9 +112,9 @@ public class Bank
         }
         return -1;
     }
-    public Vector<Integer> getResources(int playerNo )
+
+    public Vector<Integer> getResources(int playerNo)
     {
         return this.resourcesforeachplayer.get(playerNo);
     }
-
 }

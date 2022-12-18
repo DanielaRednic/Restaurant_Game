@@ -34,7 +34,7 @@ public class Player implements Runnable{
             String message = "Player" + playerNo + "|1";
             channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
 
-            System.out.println(" [x] Sent '" + message + "'");
+            System.out.println("Player #"+playerNo + " has completed an order!");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (TimeoutException e) {
@@ -68,16 +68,19 @@ public class Player implements Runnable{
                 }
                 else
                 {
+                    System.out.println("Player #"+playerNo+" didn't complete the order!");
                     return -2;
                 }
             }
             else
             {
+                System.out.println("Player #"+playerNo+" didn't complete the order!");
                 return -2;
             }
         }
         else
         {
+            System.out.println("Player #"+playerNo+" didn't complete the order!");
             return -2; //order cant be done
         }
     }
@@ -103,22 +106,39 @@ public class Player implements Runnable{
         int resolved_case;
         Vector<Integer> order ;
         Orders order1 = new Orders();
+
+        System.out.println("Player #"+playerNo+" has the starting resources:"+this.bank.getResources(playerNo));
+
         while(run)
         {
             order = order1.givePlayerOrder();
-            resolved_case = decisionMakerOnOrders(order);
+            System.out.println("Player #"+playerNo+" has the order:"+order);
 
-            System.out.println(order+" "+resolved_case + " " + this.bank.getResources(playerNo));
-            if(resolved_case==-1) {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
+            resolved_case = decisionMakerOnOrders(order);
+            System.out.println("Player #"+playerNo+" - resources left:" + this.bank.getResources(playerNo));
+
+            //Resolved case = -1 means that a player is able to complete an order.
+            if(resolved_case==-1) 
+            {
+                try
+                {
+                    //The player threads take 5s to complete an order.
+                    Thread.sleep(5000);
+                }
+                catch (InterruptedException e)
+                {
                     e.printStackTrace();
                 }
-            }else {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
+            }
+            else
+            {
+                try
+                {
+                    //The player threads get a time-out of 10s when they cannot complete an order.
+                    Thread.sleep(10000);
+                }
+                catch (InterruptedException e)
+                {
                     e.printStackTrace();
                 }
             }
