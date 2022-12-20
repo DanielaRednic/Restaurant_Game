@@ -12,56 +12,69 @@ public class Player implements Runnable{
     boolean run = true;
     Bank bank;
     int playerNo;
+    Resources resObj = new Resources();
 
-    public Player(int playerNo,Bank bank)
+    public Player(int playerNo, Bank bank)
     {
         this.score = 0;
-        this.bank=bank;
-        this.playerNo=playerNo;
+        this.bank = bank;
+        this.playerNo = playerNo;
     }
 
-    public void completeOrder(Vector<Integer> orderAsInt)
+    public Vector<Integer> getPlayerResourcesFromBank()
+    {
+        return this.bank.getResources(playerNo);
+    }
+
+    //This method completes an order for a player and increments their score
+    public synchronized void completeOrder(Vector<Integer> orderAsInt)
     {
         bank.pay(playerNo,orderAsInt);
-        this.score=this.score+1;
+        this.score = this.score + 1;
         String QUEUE_NAME = "hello";
 
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         try (Connection connection = factory.newConnection();
-             Channel channel = connection.createChannel()) {
+             Channel channel = connection.createChannel())
+             {
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
             String message = "Player" + playerNo + "|1";
             channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
 
-            System.out.println("Player #"+playerNo + " has completed an order!");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
+            System.out.println("Player #"+ playerNo + " has completed an order!");
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
-
-
-
+        catch (TimeoutException e)
+        {
+            e.printStackTrace();
+        }
     }
 
-    public int decisionMakerOnOrders(Vector<Integer> orderAsInt)
+    /* This method decides whether an order can be completed or not.
+    If it can be completed, then it calls completeOrder and rewards the player with 3 new resources.
+    If it can't be completed, first it tries to trade for the needed resource and if that also fails,
+    then it prints a message.*/
+    public synchronized int decisionMakerOnOrders(Vector<Integer> orderAsInt)
     {
-        int j=bank.isOrderPossible(playerNo,orderAsInt);
+        int j = bank.isOrderPossible(playerNo,orderAsInt);
 
-        if(j==0)
+        if(j == 0)
         {
             completeOrder(orderAsInt);
             bank.givePlayerResources(playerNo);
             return -1; //order is complete
         } 
-        else if(j==1)
+        else if(j == 1)
         {
-            int resourceNeeded=bank.getNeededResource(playerNo,orderAsInt);
-            int trade=bank.trade(playerNo,resourceNeeded);
-            if(trade==1)
+            int resourceNeeded = bank.getNeededResource(playerNo, orderAsInt);
+            int trade = bank.trade(playerNo, resourceNeeded);
+            if(trade == 1)
             {
-                if(bank.isOrderPossible(playerNo,orderAsInt)==0)
+                if(bank.isOrderPossible(playerNo, orderAsInt) == 0)
                 {
                     completeOrder(orderAsInt);
                     return -1;
@@ -85,19 +98,10 @@ public class Player implements Runnable{
         }
     }
 
+    //This method stops the run method of the thread.
     public void setRun(boolean toSet)
     {
         run = false;
-    }
-
-    public int getNumberOfResource() {
-        Vector<Integer> resources =  this.bank.getResources(playerNo);
-        Integer nrOfResource = 0;
-        for(Integer resource : resources)
-        {
-            nrOfResource += resource;
-        }
-        return nrOfResource;
     }
 
     @Override
@@ -106,16 +110,37 @@ public class Player implements Runnable{
         int resolved_case;
         Vector<Integer> order ;
         Orders order1 = new Orders();
+        Vector<Integer> bankResourcesPerPlayer = this.bank.getResources(playerNo);
 
-        System.out.println("Player #"+playerNo+" has the starting resources:"+this.bank.getResources(playerNo));
+        System.out.println("Player #"+playerNo+" has the starting resources: "+resObj.getResourceName(0) + "*" +bankResourcesPerPlayer.get(0) + " "
+                                                                              +resObj.getResourceName(1) + "*" +bankResourcesPerPlayer.get(1) + " "
+                                                                              +resObj.getResourceName(2) + "*" +bankResourcesPerPlayer.get(2) + " "
+                                                                              +resObj.getResourceName(3) + "*" +bankResourcesPerPlayer.get(3) + " "
+                                                                              +resObj.getResourceName(4) + "*" +bankResourcesPerPlayer.get(4) + " "
+                                                                              +resObj.getResourceName(5) + "*" +bankResourcesPerPlayer.get(5) + " ");
 
         while(run)
         {
+            Vector<Integer> resourcesPerPlayer = this.bank.getResources(playerNo);
+
             order = order1.givePlayerOrder();
-            System.out.println("Player #"+playerNo+" has the order:"+order);
+            String playerOrder = "";
+            for(int i = 0; i < order.size(); i++)
+            {
+                if(order.get(i) > 0)
+                {
+                    playerOrder += resObj.getResourceName(i) + "*" +order.get(i) + " ";
+                }
+            }
+            System.out.println("Player #"+playerNo+" has the order: "+ playerOrder);
 
             resolved_case = decisionMakerOnOrders(order);
-            System.out.println("Player #"+playerNo+" - resources left:" + this.bank.getResources(playerNo));
+            System.out.println("Player #"+playerNo+" - resources left: " +resObj.getResourceName(0) + "*" +resourcesPerPlayer.get(0) + " "
+                                                                         +resObj.getResourceName(1) + "*" +resourcesPerPlayer.get(1) + " "
+                                                                         +resObj.getResourceName(2) + "*" +resourcesPerPlayer.get(2) + " "
+                                                                         +resObj.getResourceName(3) + "*" +resourcesPerPlayer.get(3) + " "
+                                                                         +resObj.getResourceName(4) + "*" +resourcesPerPlayer.get(4) + " "
+                                                                         +resObj.getResourceName(5) + "*" +resourcesPerPlayer.get(5) + " ");
 
             //Resolved case = -1 means that a player is able to complete an order.
             if(resolved_case==-1) 

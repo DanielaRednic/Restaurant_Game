@@ -1,33 +1,54 @@
 import java.util.*;
 
-public class Resources {
+public class Resources
+{
+    public Resources()
+    {}
 
-    public Resources() {
+    //This method gives the name of the resource
+    public synchronized String getResourceName(int index)
+    {
+        if (index == 0)
+        {
+            return "fruits";
+        }
+        else if (index == 1)
+        {
+            return "vegetables";
+        }
+        else if (index == 2)
+        {
+            return "meat";
+        }
+        else if (index == 3)
+        {
+            return "dairy";
+        }
+        else if (index == 4)
+        {
+            return "pastries";
+        }
+        else if (index == 5)
+        {
+            return "grains";
+        }
+        return "Invalid index";
     }
 
-    //This enum is used for remembering the order of the resources inside of the array
-    public enum ResourceType {
-        fruit,
-        vegetables,
-        meat,
-        dairy,
-        pastries,
-        grains
-    };
-
+    //This method checks that a player does not exceed 20 resources at the start of the game.
     public boolean checkResourceAmount(Vector<Integer> resources)
     {
-        int sum = 0;
+        int resourcesAmount = 0;
         for(int i = 0; i < resources.size(); i++)
         {
-            sum = sum + resources.get(i);
+            resourcesAmount = resourcesAmount + resources.get(i);
         }
 
-        if(sum == 20)
+        if(resourcesAmount == 20)
         {
             return true;
         }
-        else if (sum > 20)
+        else if (resourcesAmount > 20)
         {
             return false;
         }
@@ -37,17 +58,21 @@ public class Resources {
         }
     }
 
-    public synchronized Vector<Integer> getPlayerResources() {
+    //This method assigns each player random resources at the start of each new game.
+    public synchronized Vector<Integer> getPlayerResources()
+    {
         int min = 0;
         int max = 5;
-        Vector<Integer> playerResources=new Vector<>(6);
-        for(int i = 0; i < 6/*playerResources.capacity()*/; i++) {
+        Vector<Integer> playerResources = new Vector<>(6);
+        for(int i = 0; i < 6; i++)
+        {
             playerResources.add(i, 4);
         }
 
         do
         {
             int rand = (int)Math.floor(Math.random() * (max - min + 1) + min);
+
             if (playerResources.get(rand) > 2)
             {
                 playerResources.set(rand,  playerResources.get(rand)-1);

@@ -9,14 +9,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.gson.Gson;
 
-public class FileHandler {
+public class FileHandler
+{
     //writing to "LastGameState.json" the players score,
     //remaining resources and number of trades
-    private static class Order{
+    private static class Order
+    {
         public Vector<Vector<String>> orders;
-        public String toString() {
+        public String toString()
+        {
             StringBuilder new_string = new StringBuilder();
-            for (Vector<String> resourceList : orders) {
+            for (Vector<String> resourceList : orders)
+            {
                 for (String resource : resourceList)
                     new_string.append(resource).append(" ");
                 new_string.append("\n");
@@ -81,30 +85,12 @@ public class FileHandler {
         }
         return orders_map;
     }
-//    public Vector<Vector<String>> readOrdersJSON()  {
-//        Vector<Vector<String>> ordersList = new Vector<>();
-//        JSONParser parser = new JSONParser();
-//        try {
-//            JSONObject jsonFile = (JSONObject) parser.parse(new FileReader(this.path)); //big object
-//            JSONArray orderList = (JSONArray) jsonFile.get("orders"); // orders which is an array
-//            for (Object resourceList : orderList) {
-//                Vector<String> stringList = new Vector<>();
-//                JSONArray ordersItem = (JSONArray) resourceList;
-//                for (Object resource : ordersItem) {
-//                    stringList.add((String) resource);
-//                }
-//                ordersList.add(stringList);
-//            }
-//        } catch (ParseException e) {
-//            System.out.println("Parse error" + e.getMessage());
-//        } catch (IOException e) {
-//            System.out.println("IO File error" + e.getMessage());
-//        }
-//        return ordersList;
-//    }
 
-    private void printOrdersList(Vector<Vector<String>> ordersList) {
-        for (Vector<String> resourceList : ordersList) {
+    //Method used for testing.
+    private void printOrdersList(Vector<Vector<String>> ordersList)
+    {
+        for (Vector<String> resourceList : ordersList)
+        {
             for (String resource : resourceList)
                 System.out.print(resource + " ");
             System.out.println();
@@ -112,12 +98,15 @@ public class FileHandler {
 
     }
 
-    private void printLastGameStatus(Vector<String> list) {
+    //This method prints the status of the previous game.
+    private void printLastGameStatus(Vector<String> list)
+    {
         for(String string : list)
             System.out.println(string);
     }
 
-    public static void Main(String[] args) throws FileNotFoundException {
+    public static void Main(String[] args) throws FileNotFoundException
+    {
         FileHandler util = new FileHandler("orders.json");
         util.readOrdersGSON();
     }
