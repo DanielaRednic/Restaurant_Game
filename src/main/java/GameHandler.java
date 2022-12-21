@@ -1,24 +1,24 @@
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.util.Vector;
-
 import java.io.*;
 
 public class GameHandler {
     private final int player1_score;
     private final int player2_score;
-    private Vector<Integer> player1_resources;
-    private Vector<Integer> player2_resources;
-    private final int remaining_time;
 
-    private GameHandler(Player player1, Player player2, Integer time)
+    private final int remaining_time;
+    private Bank bank;
+
+
+    private GameHandler(Player player1, Player player2, Integer time, Bank bank)
     {
         player1_score = player1.score;
         player2_score = player2.score;
 
-        player1_resources = player1.getPlayerResourcesFromBank();
-        player2_resources = player2.getPlayerResourcesFromBank();
-
         remaining_time = time;
+
+        this.bank = bank;
     }
 
     //This method reads the last game state from the JSON file
@@ -31,10 +31,17 @@ public class GameHandler {
     }
 
     //This method writes the last game state to the JSON file
-    public static int writeLastGameState(Player player1, Player player2, Integer time) throws IOException {
-        Gson gson = new Gson();
-        gson.toJson(new GameHandler(player1, player2, time), new FileWriter("LastGameState.json"));
-        return 0;
+    public static void writeLastGameState(Player player1, Player player2, Integer time, Bank bank) throws IOException {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try(Writer writer = new FileWriter("LastGameState.json")) {
+            gson.toJson(new GameHandler(player1, player2, time, bank), writer);
+        }
     }
     //Writes to "LastGameState.txt" in case of crash
+    public Integer getTime() {
+        return this.remaining_time;
+    }
+    public Bank getBank() {
+        return this.bank;
+    }
 }
