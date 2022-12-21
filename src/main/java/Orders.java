@@ -8,7 +8,6 @@ import java.util.Random;
 
 public class Orders 
 {
-    //gets the orders from the FileHandler
     private Map<Integer, Vector<String>> resources = new ConcurrentHashMap<>();
 
     Orders() 
@@ -16,6 +15,7 @@ public class Orders
         initialiseOrders();
     }
 
+    //This method reads the orders from the JSON file.
     private void initialiseOrders() 
     {
         FileHandler fl = FileHandler.fileHandlerInit("orders.json");
@@ -29,13 +29,15 @@ public class Orders
         }
     }
 
+    //This method returns a random number.
     private int getRandomNumber(int upperbound)
     {
         Random random = new Random();
         return random.nextInt(upperbound);
     }
 
-    public Vector<Integer> givePlayerOrder()
+    //This method assigns a random order to a player.
+    public synchronized Vector<Integer> givePlayerOrder()
     {
         Vector<Integer> orderAsInt = new Vector<>(Arrays.asList(0, 0, 0, 0, 0, 0));
         Vector<String> order = this.resources.get(getRandomNumber(29) + 1);

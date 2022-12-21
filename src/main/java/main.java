@@ -9,16 +9,22 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 import java.nio.charset.StandardCharsets; 
+import com.google.gson.Gson;
+import java.io.*;
 
 public class main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception
+    {
         System.out.println("##### Starting Game #####");
         System.out.println("##### Game time: 30s ####");
         FileHandler fl = new FileHandler("orders.json");
         fl.readOrdersGSON();
-        Bank bank=new Bank(2);
+
+        Bank bank = new Bank(2);
+
         Player player1 = new Player(1,bank);
         Player player2 = new Player(2,bank);
+
         Thread p1_thread = new Thread(player1);
         Thread p2_thread = new Thread(player2);
         
@@ -34,7 +40,8 @@ public class main {
                     public void run()
                     {
                         System.out.println("Time left: " + i-- + " seconds");
-                        if (i < 0) {
+                        if (i < 0)
+                        {
                             timer.cancel();
                             player1.setRun(false);
                             player2.setRun(false);
@@ -67,7 +74,5 @@ public class main {
         {
             System.out.println(e);
         }
-
-        
     }
 }
