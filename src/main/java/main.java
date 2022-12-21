@@ -9,8 +9,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 import java.nio.charset.StandardCharsets; 
-import com.google.gson.Gson;
-import java.io.*;
+
 
 public class main {
     public static void main(String[] args) throws Exception
@@ -19,12 +18,21 @@ public class main {
         System.out.println("##### Game time: 30s ####");
         FileHandler fl = new FileHandler("orders.json");
         fl.readOrdersGSON();
+        GameHandler lastGameStatus = GameHandler.readLastGameStateGSON();
+        Player player1, player2;
+        Bank bank;
+        Integer time = 50;
+        if (lastGameStatus.getTime() >= 0) {
+            bank = lastGameStatus.getBank();
+            player1 = new Player(0, bank);
+            player2 = new Player(1, bank);
+            time = lastGameStatus.getTime();
+        } else {
+            bank = new Bank(2);
 
-        Bank bank = new Bank(2);
-
-        Player player1 = new Player(1,bank);
-        Player player2 = new Player(2,bank);
-
+            player1 = new Player(1, bank);
+            player2 = new Player(2, bank);
+        }
         Thread p1_thread = new Thread(player1);
         Thread p2_thread = new Thread(player2);
         
@@ -33,13 +41,20 @@ public class main {
 
         try{
             final Timer timer = new Timer();
-                timer.scheduleAtFixedRate(new TimerTask()
+
+            Integer finalTime = time;
+            timer.scheduleAtFixedRate(new TimerTask()
                 {
-                    int i = 50; // Time in seconds
+                    int i = finalTime; // Time in seconds
 
                     public void run()
                     {
                         System.out.println("Time left: " + i-- + " seconds");
+                        try {
+                            GameHandler.writeLastGameState(player1, player2,i, bank);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         if (i < 0)
                         {
                             timer.cancel();

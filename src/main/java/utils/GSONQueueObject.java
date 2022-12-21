@@ -1,7 +1,6 @@
 package utils;
 
 import com.google.gson.Gson;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Vector;
 

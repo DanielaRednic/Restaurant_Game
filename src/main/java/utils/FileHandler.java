@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import com.google.gson.Gson;
 
 public class FileHandler
@@ -34,45 +33,11 @@ public class FileHandler
     public FileHandler(String path) {
         this.path = path;
     }
+
     static public FileHandler fileHandlerInit(String path) {
         return new FileHandler(path);
     }
 
-//    public Vector<String> readLastGameStateJSON() {
-//        JSONParser parser = new JSONParser();
-//        Vector<String> lastGameStatus = new Vector<>();
-//        try {
-//            JSONObject JSONFile = (JSONObject) parser.parse(new FileReader(this.path));
-//
-//            JSONObject game = (JSONObject) JSONFile.get("games");
-//
-//
-//            JSONObject last_state = (JSONObject) game.get("1"); //get last state
-//
-//
-//            String player1_score = (String) last_state.get("player1_score");
-//            lastGameStatus.add(player1_score);
-//
-//            String player1_resource_count = (String) last_state.get("player1_resource_count");
-//            lastGameStatus.add(player1_resource_count);
-//
-//            String player2_score = (String) last_state.get("player2_score");
-//            lastGameStatus.add(player2_score);
-//
-//            String player2_resource_count = (String) last_state.get("player2_resource_count");
-//            lastGameStatus.add(player2_resource_count);
-//
-//            String remaining_time = (String) last_state.get("remaining_time");
-//            lastGameStatus.add(remaining_time);
-//
-//
-//        } catch (ParseException e) {
-//            System.out.println("Parse error" + e.getMessage());
-//        } catch (IOException e) {
-//            System.out.println("IO File error" + e.getMessage());
-//        }
-//        return lastGameStatus;
-//    }
     public Map<Integer, Vector<String>> readOrdersGSON() throws FileNotFoundException {
         Map<Integer, Vector<String>> orders_map = new ConcurrentHashMap<>();
         Gson gson = new Gson();
@@ -86,30 +51,6 @@ public class FileHandler
         return orders_map;
     }
 
-    //Method used for testing.
-    private void printOrdersList(Vector<Vector<String>> ordersList)
-    {
-        for (Vector<String> resourceList : ordersList)
-        {
-            for (String resource : resourceList)
-                System.out.print(resource + " ");
-            System.out.println();
-        }
-
-    }
-
-    //This method prints the status of the previous game.
-    private void printLastGameStatus(Vector<String> list)
-    {
-        for(String string : list)
-            System.out.println(string);
-    }
-
-    public static void Main(String[] args) throws FileNotFoundException
-    {
-        FileHandler util = new FileHandler("orders.json");
-        util.readOrdersGSON();
-    }
 }
 
 

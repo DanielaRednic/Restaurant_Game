@@ -26,6 +26,7 @@ public class Main {
     private static Integer decodeScore(boolean score) {
         return score ? 1 : 0;
     }
+
     private static void decodeData(String data) {
         if (data.equals("Exit"))
         {
@@ -34,29 +35,35 @@ public class Main {
             return ;
         }
         GSONQueueObject decodedData = GSONQueueObject.readQueueObject(data);
+        System.out.println(decodedData);
         live_score.put(decodedData.getPlayer(), live_score.get(decodedData.getPlayer()) + decodeScore(decodedData.getScore()));
+
         liveScore(0);
+
 
     }
     private static void liveScore(int flag) {
         if (flag == 1) {
             System.out.println("#### The final score is ####");
         }
+
         if (live_score.get("Player1") > live_score.get("Player2")) {
-            total_live_score.put("Player1", total_live_score.get("Player1") + 1);
             System.out.println("Player 1 wins with the score " + live_score.get("Player1") + " > " + live_score.get("Player2"));
-        }
-        else  if (live_score.get("Player1") < live_score.get("Player2")) {
-            total_live_score.put("Player1", total_live_score.get("Player2") + 1);
+        } else if (live_score.get("Player1") < live_score.get("Player2")) {
             System.out.println("Player 2 wins with the score " + live_score.get("Player1") + " < " + live_score.get("Player2"));
-        }
-        else
-            System.out.println("TIE with the score: " + live_score.get("Player1"));
+        } else
+            System.out.println("Player 1 score: " + live_score.get("Player1") + ", Player 2 score: " + live_score.get("Player2"));
         if (flag == 1) {
+            if (live_score.get("Player1") > live_score.get("Player2"))
+                total_live_score.put("Player1", total_live_score.get("Player1") + 1);
+            else if (live_score.get("Player1") < live_score.get("Player2"))
+                total_live_score.put("Player2", total_live_score.get("Player2") + 1);
+
             System.out.println("#### The overall score is ####");
             System.out.println("Player 1: " + total_live_score.get("Player1"));
             System.out.println("Player 2: " + total_live_score.get("Player2"));
             System.out.println("##############################\n\n");
+
         }
     }
     public static void main(String[] argv) throws Exception {
@@ -75,7 +82,6 @@ public class Main {
 
             decodeData(message);
 
-            //System.out.println(" [x] Received '" + message + "'");
         };
         channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
     }

@@ -1,4 +1,7 @@
+
 import com.google.gson.Gson;
+
+import java.nio.charset.StandardCharsets;
 import java.util.Vector;
 
 public class GSONQueueObject {
@@ -26,6 +29,43 @@ public class GSONQueueObject {
         Gson gson = new Gson();
         return gson.fromJson(jsonString, GSONQueueObject.class);
     }
+    @Override
+    public String toString() {
+        StringBuilder player = new StringBuilder(this.player + " ingredients: ");
+        int resourceIndex = 0;
+        for (Integer resource : this.resource) {
+            if(resource == 0)
+                continue;
+            switch (resourceIndex) {
+                case 0: {
+                    player.append(resource).append(" fruits,");
+                    break;
+                }
+                case 1: {
+                    player.append(resource).append(" vegetables,");
+                    break;
+                }
 
+                case 2: {
+                    player.append(resource).append(" meat,");
+                    break;
+                }
+                case 3: {
+                    player.append(resource).append(" dairy,");
+                    break;
+                }
+                case 4: {
+                    player.append(resource).append(" pastries,");
+                    break;
+                }
+                case 5: {
+                    player.append(resource).append(" grains,");
+                    break;
+                }
+            }
+            resourceIndex++;
+        }
+        return player.toString();
+    }
 
 }

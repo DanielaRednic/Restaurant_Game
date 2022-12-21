@@ -1,21 +1,18 @@
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Vector;
 
-import com.google.gson.Gson;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 import utils.GSONQueueObject;
 
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 public class Player implements Runnable{
     public int score;
     boolean run = true;
     Bank bank;
-    int playerNo;
+    Integer playerNo;
     Resources resObj = new Resources();
 
     public Player(int playerNo, Bank bank)
@@ -43,17 +40,12 @@ public class Player implements Runnable{
              Channel channel = connection.createChannel())
              {
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-
-            byte[] message = GSONQueueObject.createQueueObject(this.bank.resources, "Player" + this.playerNo, true);
+            byte[] message = GSONQueueObject.createQueueObject(this.bank.getResources(this.playerNo), "Player" + this.playerNo, true);
             channel.basicPublish("", QUEUE_NAME, null, message);
 
             System.out.println("Player #"+ playerNo + " has completed an order!");
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        catch (TimeoutException e)
+        catch (IOException | TimeoutException e)
         {
             e.printStackTrace();
         }

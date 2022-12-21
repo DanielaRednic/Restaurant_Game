@@ -1,9 +1,28 @@
 {
-    "games": {
-            "player1_score": "1",
-            "player1_resource_count": "array",
-            "player2_score": "2",
-            "player2_resource_count": "array",
-            "remaining_time": "12"
-    }
+  "player1_score": 0,
+  "player2_score": 3,
+  "remaining_time": -1,
+  "bank": {
+    "resourcesForEachPlayer": {
+      "1": [
+        4,
+        1,
+        8,
+        4,
+        0,
+        0
+      ],
+      "2": [
+        1,
+        4,
+        6,
+        8,
+        0,
+        1
+      ]
+    },
+    "resources": [],
+    "resObj": {},
+    "numberOfPlayers": 2
+  }
 }
