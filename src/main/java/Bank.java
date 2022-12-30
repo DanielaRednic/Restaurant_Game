@@ -45,14 +45,17 @@ public class Bank
     //Method for checking if a player can complete an order.
     public synchronized int isOrderPossible(int playerNo, Vector<Integer> orderAsInt)
     {
+        lock.lock();
         int j = 0;
-        Vector<Integer> tmp = new Vector<>(isOrderPossibleHelper(playerNo, orderAsInt));
-        for(int i = 0; i < 6; i++)
-        {
-            if(tmp.get(i) < 0)
-            {
-                j = j + 1;
+        try {
+            Vector<Integer> tmp = new Vector<>(isOrderPossibleHelper(playerNo, orderAsInt));
+            for (int i = 0; i < 6; i++) {
+                if (tmp.get(i) < 0) {
+                    j = j + 1;
+                }
             }
+        }finally {
+            lock.unlock();
         }
         return j;
     }
@@ -60,35 +63,48 @@ public class Bank
     //Method that returns the resource a players wants to obtain from trading.
     public synchronized int getNeededResource(int playerNo, Vector<Integer> orderAsInt)
     {
-        for(int i = 0; i < 6; i++)
-        {
-            if(this.resourcesForEachPlayer.get(playerNo).get(i) < orderAsInt.get(i))
-            {
-                return i; //returns needed resource for trade
+        lock.lock();
+        int j=-1;
+        try {
+            for (int i = 0; i < 6; i++) {
+                if (this.resourcesForEachPlayer.get(playerNo).get(i) < orderAsInt.get(i)) {
+                    j = i; //returns needed resource for trade
+                }
             }
+        }finally {
+            lock.unlock();
         }
-        return -1;
+        return j;
     }
 
     //Method for paying resources to the bank.
     public synchronized void pay(int playerNo, Vector<Integer> orderAsInt)
     {
-        for (int i = 0; i < 6; i++) 
-        {
-            this.resourcesForEachPlayer.get(playerNo).set(i, this.resourcesForEachPlayer.get(playerNo).get(i)-orderAsInt.get(i));
+        lock.lock();
+        try {
+            for (int i = 0; i < 6; i++) {
+                this.resourcesForEachPlayer.get(playerNo).set(i, this.resourcesForEachPlayer.get(playerNo).get(i) - orderAsInt.get(i));
+            }
+        }finally {
+            lock.unlock();
         }
     }
 
     //Method that rewards the players 3 random resources after they complete an order.
     public synchronized void givePlayerResources(int playerNo){
-        int min = 0;
-        int max = 5;
-        int rand = (int)Math.floor(Math.random() * (max - min + 1) + min);
-        int rand2 = (int)Math.floor(Math.random() * (max - min + 1) + min);
-        int rand3 = (int)Math.floor(Math.random() * (max - min + 1) + min);
-        this.resourcesForEachPlayer.get(playerNo).set(rand, this.resourcesForEachPlayer.get(playerNo).get(rand) + 1);
-        this.resourcesForEachPlayer.get(playerNo).set(rand2, this.resourcesForEachPlayer.get(playerNo).get(rand2) + 1);
-        this.resourcesForEachPlayer.get(playerNo).set(rand3, this.resourcesForEachPlayer.get(playerNo).get(rand3) + 1);
+        lock.lock();
+        try {
+            int min = 0;
+            int max = 5;
+            int rand = (int) Math.floor(Math.random() * (max - min + 1) + min);
+            int rand2 = (int) Math.floor(Math.random() * (max - min + 1) + min);
+            int rand3 = (int) Math.floor(Math.random() * (max - min + 1) + min);
+            this.resourcesForEachPlayer.get(playerNo).set(rand, this.resourcesForEachPlayer.get(playerNo).get(rand) + 1);
+            this.resourcesForEachPlayer.get(playerNo).set(rand2, this.resourcesForEachPlayer.get(playerNo).get(rand2) + 1);
+            this.resourcesForEachPlayer.get(playerNo).set(rand3, this.resourcesForEachPlayer.get(playerNo).get(rand3) + 1);
+        }finally {
+            lock.unlock();
+        }
     }
 
     //Method that handles the trading between players.
