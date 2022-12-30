@@ -1,5 +1,7 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.util.Map;
 import java.util.Vector;
 import java.io.*;
 
@@ -41,7 +43,10 @@ public class GameHandler {
     public Integer getTime() {
         return this.remaining_time;
     }
-    public Bank getBank() {
-        return this.bank;
+    public Map<Integer, Vector<Integer>> getBank() {
+        return this.bank.resourcesForEachPlayer;
+    }
+    public int getPlayerNr(){
+        return this.bank.numberOfPlayers;
     }
 }
