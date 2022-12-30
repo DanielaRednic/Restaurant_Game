@@ -1,11 +1,12 @@
 import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Bank 
 {
     Map<Integer, Vector<Integer>> resourcesForEachPlayer= new ConcurrentHashMap<>();
-    Vector<Integer> resources = new Vector<>(6,0);
+    private transient ReentrantLock lock =new ReentrantLock();
     Resources resObj = new Resources();
     int numberOfPlayers; // number of players in the game
 
@@ -17,16 +18,26 @@ public class Bank
             this.resourcesForEachPlayer.put(i,resObj.getPlayerResources());
         }
     }
+    public Bank(int numberOfPlayers,Map<Integer, Vector<Integer>>resourcesForEachPlayer){
+        this.numberOfPlayers = numberOfPlayers;
+        this.resourcesForEachPlayer=resourcesForEachPlayer;
+    }
 
     //Helper method for isOrderPossible
     //We create a vector with the needed resources for the order
     private Vector<Integer> isOrderPossibleHelper(int playerNo,Vector<Integer> orderAsInt)
     {
         Vector<Integer> tmp =new Vector<>(6);
-        for (int i = 0 ; i < 6 ; i++)
-        {
-            Vector<Integer> p=this.resourcesForEachPlayer.get(playerNo);
-            tmp.add(i,p.get(i)-orderAsInt.get(i));
+        lock.lock();
+        try {
+
+            for (int i = 0; i < 6; i++) {
+                Vector<Integer> p = this.resourcesForEachPlayer.get(playerNo);
+                tmp.add(i, p.get(i) - orderAsInt.get(i));
+            }
+        }finally{
+            lock.unlock();
+
         }
         return tmp;
     }
@@ -83,38 +94,43 @@ public class Bank
     //Method that handles the trading between players.
     public synchronized int trade(int playerNo, int resourceNeeded)
     {
-        System.out.println("##### Trading #####");
-        int traderTwo = 0; //This variable represents the player who has the biggest amount of resourceNeeded type
-        int mostOfResourceNeeded = 0;
-        for(int i = 1; i <= numberOfPlayers; i++)
-        {
-            if(this.resourcesForEachPlayer.get(i).get(resourceNeeded) > mostOfResourceNeeded)
-            {
-                mostOfResourceNeeded=this.resourcesForEachPlayer.get(i).get(resourceNeeded);
-                traderTwo = i;
+
+        lock.lock();
+        int return_code=-1;
+        try {
+            System.out.println("##### Trading #####");
+            int traderTwo = 0; //This variable represents the player who has the biggest amount of resourceNeeded type
+            int mostOfResourceNeeded = 0;
+            for (int i = 1; i <= numberOfPlayers; i++) {
+                if (this.resourcesForEachPlayer.get(i).get(resourceNeeded) > mostOfResourceNeeded) {
+                    mostOfResourceNeeded = this.resourcesForEachPlayer.get(i).get(resourceNeeded);
+                    traderTwo = i;
+                }
             }
-        }
-        int disposableResource = 0;
-        int indexMaxForCurrentPlayer = -1;
-        for(int i = 0; i < 6; i++)
-        {
-            if(this.resourcesForEachPlayer.get(playerNo).get(i)>disposableResource)
-            {
-                disposableResource = this.resourcesForEachPlayer.get(playerNo).get(i);
-                indexMaxForCurrentPlayer = i;
+            int disposableResource = 0;
+            int indexMaxForCurrentPlayer = -1;
+            for (int i = 0; i < 6; i++) {
+                if (this.resourcesForEachPlayer.get(playerNo).get(i) > disposableResource) {
+                    disposableResource = this.resourcesForEachPlayer.get(playerNo).get(i);
+                    indexMaxForCurrentPlayer = i;
+                }
             }
+            if (traderTwo > 0 && indexMaxForCurrentPlayer > 0 && mostOfResourceNeeded > 0 && disposableResource > 0) {
+                this.resourcesForEachPlayer.get(playerNo).set(resourceNeeded, this.resourcesForEachPlayer.get(playerNo).get(resourceNeeded) + 1);
+                this.resourcesForEachPlayer.get(traderTwo).set(resourceNeeded, this.resourcesForEachPlayer.get(traderTwo).get(resourceNeeded) - 1);
+                this.resourcesForEachPlayer.get(traderTwo).set(indexMaxForCurrentPlayer, this.resourcesForEachPlayer.get(traderTwo).get(indexMaxForCurrentPlayer) + 1);
+                this.resourcesForEachPlayer.get(playerNo).set(indexMaxForCurrentPlayer, this.resourcesForEachPlayer.get(playerNo).get(indexMaxForCurrentPlayer) - 1);
+                System.out.println("Player #" + traderTwo + " gave Player#" + playerNo + " [" + resObj.getResourceName(resourceNeeded) + "] and got [" + resObj.getResourceName(indexMaxForCurrentPlayer) + "] in return.");
+                return_code = 1;
+            }
+
+            if (return_code == -1) {
+                System.out.println("##### Trading failed #####");
+            }
+        }finally{
+            lock.unlock();
         }
-        if(traderTwo > 0 && indexMaxForCurrentPlayer > 0 && mostOfResourceNeeded > 0 && disposableResource > 0)
-        {
-            this.resourcesForEachPlayer.get(playerNo).set(resourceNeeded,this.resourcesForEachPlayer.get(playerNo).get(resourceNeeded)+1);
-            this.resourcesForEachPlayer.get(traderTwo).set(resourceNeeded,this.resourcesForEachPlayer.get(traderTwo).get(resourceNeeded)-1);
-            this.resourcesForEachPlayer.get(traderTwo).set(indexMaxForCurrentPlayer,this.resourcesForEachPlayer.get(traderTwo).get(indexMaxForCurrentPlayer)+1);
-            this.resourcesForEachPlayer.get(playerNo).set(indexMaxForCurrentPlayer,this.resourcesForEachPlayer.get(playerNo).get(indexMaxForCurrentPlayer)-1);
-            System.out.println("Player #"+traderTwo +" gave Player#"+playerNo+" ["+resObj.getResourceName(resourceNeeded) + "] and got ["+resObj.getResourceName(indexMaxForCurrentPlayer)+"] in return.");
-            return 1;
-        }
-        System.out.println("##### Trading failed #####");
-        return -1;
+        return return_code;
     }
 
     public Vector<Integer> getResources(int playerNo)

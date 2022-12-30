@@ -23,9 +23,10 @@ public class main {
         Bank bank;
         Integer time = 50;
         if (lastGameStatus.getTime() >= 0) {
-            bank = lastGameStatus.getBank();
-            player1 = new Player(0, bank);
-            player2 = new Player(1, bank);
+            System.out.println(lastGameStatus.getBank());
+            bank = new Bank(lastGameStatus.getPlayerNr(),lastGameStatus.getBank());
+            player1 = new Player(1, bank);
+            player2 = new Player(2, bank);
             time = lastGameStatus.getTime();
         } else {
             bank = new Bank(2);
@@ -72,11 +73,7 @@ public class main {
                                 String message = "Exit";
                                 channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
                             }
-                            catch (IOException e)
-                            {
-                                e.printStackTrace();
-                            }
-                            catch (TimeoutException e)
+                            catch (IOException | TimeoutException e)
                             {
                                 e.printStackTrace();
                             }
