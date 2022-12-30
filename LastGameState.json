@@ -1,23 +1,23 @@
 {
-  "player1_score": 5,
-  "player2_score": 5,
-  "remaining_time": -1,
+  "player1_score": 1,
+  "player2_score": 1,
+  "remaining_time": 16,
   "bank": {
     "resourcesForEachPlayer": {
       "1": [
-        5,
+        7,
+        1,
         4,
-        0,
         2,
-        0,
+        3,
         3
       ],
       "2": [
-        3,
-        2,
+        4,
+        4,
         1,
-        2,
-        2,
+        4,
+        3,
         4
       ]
     },

@@ -23,7 +23,6 @@ public class main {
         Bank bank;
         Integer time = 50;
         if (lastGameStatus.getTime() >= 0) {
-            System.out.println(lastGameStatus.getBank());
             bank = new Bank(lastGameStatus.getPlayerNr(),lastGameStatus.getBank());
             player1 = new Player(1, bank);
             player2 = new Player(2, bank);
